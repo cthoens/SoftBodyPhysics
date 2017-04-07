@@ -17,6 +17,7 @@ public:
 
 public slots:
     void togglePlay(bool play);
+    void sliderChanged(int value);
 
 private:
     Ui::MainWindow *ui;

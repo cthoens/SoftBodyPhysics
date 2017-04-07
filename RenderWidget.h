@@ -1,13 +1,18 @@
 #pragma once
 
 #include "Renderer.h"
+#include "Scene.h"
+
+#include "Scenes/Bar.h"
 
 #include <QGLWidget>
 
 class RenderWidget : public QGLWidget
 {
 public:
+    Bar scene;
     boolean play = true;
+
     RenderWidget(QWidget *parent);
 
 protected:
@@ -18,6 +23,6 @@ protected:
     void mouseMoveEvent(QMouseEvent *event) override;
     void mousePressEvent(QMouseEvent *event) override;
     void mouseReleaseEvent(QMouseEvent *event) override;
-private:
+private:    
     Renderer renderer;
 };

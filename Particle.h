@@ -13,6 +13,7 @@ public:
 class Particle
 {
 public:
+    class Body& body;
     QVector2D position;
     QVector2D velocity;
     QVector2D bendVelocity;
@@ -22,9 +23,7 @@ public:
     std::vector<float> restingAngles;
     float invMass;
 
-    static float stiffness;
-
-    Particle();
+    Particle(Body& body);
     ~Particle();
 
     void UpdateStretchForce();

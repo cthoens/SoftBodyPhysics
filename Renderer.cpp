@@ -1,5 +1,7 @@
 #include "Renderer.h"
 
+#include "Scene.h"
+#include "Body.h"
 #include "Particle.h"
 
 #include <QtGui/QOpenGLShaderProgram>
@@ -51,14 +53,9 @@ void Renderer::resizeGL(float w, float h) {
     m_program->setUniformValue(m_matrixUniform, projection);
 }
 
-Body& Renderer::AddBody(vector<Particle> &particles) {
-    bodies.push_back({std::move(particles)});
-    return bodies.back();
-}
-
 void Renderer::Step() {
-    for (auto &body : bodies) {
-        body.Step(1.0f / 60.0f);
+    for (auto &body : scene->bodies) {
+        body.Step(1.0f / 120.0f);
     }
 }
 
@@ -68,8 +65,8 @@ void Renderer::Render() {
     m_program->bind();
     m_program->setUniformValue(m_matrixUniform, projection);
 
-    for (auto &body : bodies) {
-        body.Render(*this);
+    for (auto const& body : scene->bodies) {
+        RenderBody(body);
     }
 
     m_program->release();
@@ -79,59 +76,38 @@ void Renderer::SetColor(QVector3D color) {
     m_program->setUniformValue(m_colUniform, color.x(), color.y(), color.z());
 }
 
-void Body::Render(Renderer &renderer) const {
+void Renderer::RenderBody(Body const& body) {
+    std::vector<Particle> const& particles = body.particles;
+
     vector<QVector2D> points;
     points.reserve(particles.size());
     for (auto &particle : particles) {
-            points.push_back(particle.position);
+        points.push_back(particle.position);
     }
 
     for (auto &particle : particles) {
-            points.push_back(particle.position);
-            points.push_back(particle.position + .5f * particle.bendForce);
+        points.push_back(particle.position);
+        points.push_back(particle.position + .5f * particle.bendForce);
     }
 
     for (auto &particle : particles) {
-            points.push_back(particle.position);
-            points.push_back(particle.position + .5f * particle.totalForce);
+        points.push_back(particle.position);
+        points.push_back(particle.position + .5f * particle.totalForce);
     }
 
-    renderer.glVertexAttribPointer(renderer.m_posAttr, 2, GL_FLOAT, GL_FALSE, 0, &points[0]);
-    renderer.glEnableVertexAttribArray(0);
+    glVertexAttribPointer(m_posAttr, 2, GL_FLOAT, GL_FALSE, 0, &points[0]);
+    glEnableVertexAttribArray(0);
 
     int particleCount = int(particles.size());
 
-    renderer.SetColor(QVector3D(1.0f, 1.0f, 1.0f));
-    renderer.glDrawArrays(GL_LINE_STRIP, 0, particleCount);
+    SetColor(QVector3D(1.0f, 1.0f, 1.0f));
+    glDrawArrays(GL_LINE_STRIP, 0, particleCount);
 
-    renderer.SetColor(QVector3D(1.0f, 0.0f, 0.0f));
-    renderer.glDrawArrays(GL_LINES, particleCount, 2 * particleCount);
+    SetColor(QVector3D(1.0f, 0.0f, 0.0f));
+    glDrawArrays(GL_LINES, particleCount, 2 * particleCount);
 
-    renderer.SetColor(QVector3D(0.0f, 1.0f, 0.0f));
-    renderer.glDrawArrays(GL_LINES, 3 * particleCount, 2 * particleCount);
+    SetColor(QVector3D(0.0f, 1.0f, 0.0f));
+    glDrawArrays(GL_LINES, 3 * particleCount, 2 * particleCount);
 
-    renderer.glDisableVertexAttribArray(0);
-}
-
-void Body::Step(float elapsed) {
-    for (auto &particle : particles) {
-        particle.totalForce = QVector2D();
-        particle.bendForce = QVector2D();
-    }
-
-    for (auto &particle : particles) {
-        particle.UpdateStretchForce();
-    }
-
-    for (auto &particle : particles) {
-        particle.StepStretch(elapsed);
-    }
-
-    for (auto &particle : particles) {
-        particle.UpdateBendForce();
-    }
-
-    for (auto &particle : particles) {
-        particle.StepBend(elapsed);
-    }
+    glDisableVertexAttribArray(0);
 }

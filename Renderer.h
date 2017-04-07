@@ -6,19 +6,10 @@
 
 #include <vector>
 
-struct Body {
-    std::vector<class Particle> particles;
-
-    void Render(class Renderer &renderer) const;
-    void Step(float elapsed);
-};
-
 class Renderer : public QOpenGLFunctions {
-public:
-    int m_posAttr = 0;
-    int m_colUniform = 0;
-    int m_matrixUniform = 0;
+public:    
     QVector2D invStretch;
+    class Scene *scene = nullptr;
 
     Renderer();
 
@@ -29,13 +20,14 @@ public:
 
     void SetColor(QVector3D color);
 
-    Body& AddBody(std::vector<class Particle> &particles);
+    class Body& AddBody(std::vector<class Particle> &particles);
 
 private:
+    int m_posAttr = 0;
+    int m_colUniform = 0;
+    int m_matrixUniform = 0;
     QMatrix4x4 projection;
     class QOpenGLShaderProgram *m_program;
-
-    std::vector<Body> bodies;
 
     void RenderBody(Body const& body);
 };

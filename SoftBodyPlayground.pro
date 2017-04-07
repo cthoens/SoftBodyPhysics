@@ -25,13 +25,19 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += Main.cpp\
     MainWindow.cpp \
+    Scene.cpp \
+    Body.cpp \
     Particle.cpp \
     Renderer.cpp \
-    RenderWidget.cpp
+    RenderWidget.cpp \
+    Scenes/Bar.cpp
 
 HEADERS  += MainWindow.h \
+    Scene.h \
+    Body.h \
     Particle.h \
     Renderer.h \
-    RenderWidget.h
+    RenderWidget.h \
+    Scenes/Bar.h
 
 FORMS    += mainwindow.ui
