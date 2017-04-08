@@ -15,27 +15,18 @@ using namespace std;
 QTimer timer;
 
 RenderWidget::RenderWidget(QWidget *parent) :
-    QGLWidget(parent)
+    QGLWidget(parent),
+    renderer(gl)
 {
     connect(&timer, SIGNAL(timeout()), this, SLOT(update()));
     timer.start(10);
     renderer.scene = &scene;
-
-    /*
-    vector<QVector2D> points;
-    for (int i = 0; i < 10; i++) {
-        float angle = (2.0f * float(M_PI) * i) / 10.0f;
-        points.push_back(0.5f * QVector2D(cos(angle), sin(angle)));
-    }
-    body = &scene.AddBody(points, 1.0f);
-    body->particles[0].invMass = 0.0f;
-    */
 }
 
 void RenderWidget::initializeGL()
 {
-    renderer.initializeOpenGLFunctions();
-    renderer.initialize(this);    
+    gl.initializeOpenGLFunctions();
+    renderer.initialize();
 }
 
 void RenderWidget::resizeGL(int w, int h)
@@ -55,6 +46,7 @@ void RenderWidget::paintGL()
 }
 
 Particle *dragging = nullptr;
+float draggingInvMass = 0.0f;
 
 void RenderWidget::mouseMoveEvent(QMouseEvent *event)
 {
@@ -75,6 +67,8 @@ void RenderWidget::mousePressEvent(QMouseEvent *event)
     for (Particle &particle : scene.bodies[0].particles) {
         if ((particle.position - pos).length() < 0.03) {
             dragging = &particle;
+            draggingInvMass = dragging->invMass;
+            dragging->invMass = 0.0f;
             break;
         }
     }
@@ -82,6 +76,9 @@ void RenderWidget::mousePressEvent(QMouseEvent *event)
 
 void RenderWidget::mouseReleaseEvent(QMouseEvent *)
 {
+    if (dragging) {
+        dragging->invMass = draggingInvMass;
+    }
     dragging = nullptr;
 }
 

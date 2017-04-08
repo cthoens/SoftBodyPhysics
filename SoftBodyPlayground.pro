@@ -30,7 +30,8 @@ SOURCES += Main.cpp\
     Particle.cpp \
     Renderer.cpp \
     RenderWidget.cpp \
-    Scenes/Bar.cpp
+    Scenes/Bar.cpp \
+    Shaders/SingleColorProgram.cpp
 
 HEADERS  += MainWindow.h \
     Scene.h \
@@ -38,6 +39,7 @@ HEADERS  += MainWindow.h \
     Particle.h \
     Renderer.h \
     RenderWidget.h \
-    Scenes/Bar.h
+    Scenes/Bar.h \
+    Shaders/SingleColorProgram.h
 
 FORMS    += mainwindow.ui

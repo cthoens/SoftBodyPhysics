@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Shaders/SingleColorProgram.h"
+
 #include <QVector2D>
 #include <QMatrix4x4>
 #include <QtGui/QOpenGLFunctions>
@@ -13,20 +15,17 @@ public:
 
     Renderer();
 
-    void initialize(QObject *parent);
+    void initialize();
     void resizeGL(float w, float h);
     void Render();
-
-    void SetColor(QVector3D color);
 
     class Body& AddBody(std::vector<class Particle> &particles);
 
 private:
-    int m_posAttr = 0;
-    int m_colUniform = 0;
-    int m_matrixUniform = 0;
     QMatrix4x4 projection;
-    class QOpenGLShaderProgram *m_program;
+    SingleColorProgram singleColorProgram;
 
     void RenderBody(Body const& body);
 };
+
+extern Renderer gl;
