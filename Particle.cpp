@@ -30,26 +30,37 @@ void Particle::UpdateStretchForce()
 
 void Particle::UpdateBendForce()
 {
-    if (links.size() == 2) {
-        QVector2D v1 = links[0].particle.position - position;
-        QVector2D v2 = links[1].particle.position - position;
-        float angle = (float)(atan2(v2.y(), v2.x()) - atan2(v1.y(), v1.x()));
-        if (angle < 0) angle += 2 * float(M_PI);
-        float elongation = angle - links[0].relaxedAngle;
+    int linkCount = int(links.size());
+    if (linkCount < 2) {
+        return;
+    }
+
+    for (int linkIndex=0; linkIndex<linkCount; linkIndex++)
+    {
+        int nextLinkIndex = (linkIndex + 1) % linkCount;
+        QVector2D v1 = links[linkIndex].particle.position - position;
+        QVector2D v2 = links[nextLinkIndex].particle.position - position;
+        float link1AngleToX = float(atan2(v1.y(), v1.x()));
+        float link2AngleToX = float(atan2(v2.y(), v2.x()));
+        float angleToNext = link2AngleToX - link1AngleToX;
+        if (angleToNext < 0) {
+            angleToNext += 2 * float(M_PI);
+        }
+        float elongation = angleToNext - links[linkIndex].relaxedAngle;
 
         {
-            QVector2D dir = (position - links[0].particle.position).normalized();
+            QVector2D dir = (position - links[linkIndex].particle.position).normalized();
             QVector2D perpDir(-dir.y(), dir.x());
             QVector2D force = perpDir * -elongation * body.bendStiffness;
-            links[0].particle.bendForce += force;
+            links[linkIndex].particle.bendForce += force;
             bendForce -= force;
         }
 
         {
-            QVector2D dir = (position - links[1].particle.position).normalized();
+            QVector2D dir = (position - links[nextLinkIndex].particle.position).normalized();
             QVector2D perpDir(-dir.y(), dir.x());
             QVector2D force = perpDir * elongation * body.bendStiffness;
-            links[1].particle.bendForce += force;
+            links[nextLinkIndex].particle.bendForce += force;
             bendForce -= force;
         }
     }

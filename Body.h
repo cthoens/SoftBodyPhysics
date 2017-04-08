@@ -9,7 +9,7 @@
 class Body {
 public:
     float stiffness = 2.0f;
-    float bendStiffness = 2.0f;
+    float bendStiffness = 5.0f;
     float friction = 0.95f;
     float bendFriction = 0.95f;
 

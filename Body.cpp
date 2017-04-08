@@ -61,7 +61,6 @@ public:
     {
         return (link1.angleToX < link2.angleToX);
     }
-
 };
 
 class TempParticle {
@@ -82,7 +81,11 @@ public:
 
         int next = 1;
         for (auto const& tmpLink : links) {
-            float angleToNext = abs(links[(next++) % int(links.size())].angleToX - tmpLink.angleToX);
+            float nextAngelToX = links[(next++) % int(links.size())].angleToX;
+            float angleToNext =  nextAngelToX - tmpLink.angleToX;
+            if (angleToNext < 0) {
+                angleToNext += 2 * float(M_PI);
+            }
             Particle &particle = *(tmpLink.particle);
             Link link = {particle, tmpLink.relaxedDistance, angleToNext};
             p.links.push_back(link);
