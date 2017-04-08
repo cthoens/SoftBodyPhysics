@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Shaders/SingleColorProgram.h"
+#include "Shaders/MultiColorProgram.h"
 
 #include <QVector2D>
 #include <QMatrix4x4>
@@ -24,6 +25,7 @@ public:
 private:
     QMatrix4x4 projection;
     SingleColorProgram singleColorProgram;
+    MultiColorProgram multiColorProgram;
 
     void RenderBody(Body const& body);
 };

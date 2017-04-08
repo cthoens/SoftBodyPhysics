@@ -20,11 +20,11 @@ void SingleColorProgram::initialize() {
 
 void SingleColorProgram::bind() {
     QOpenGLShaderProgram::bind();
-    gl.glEnableVertexAttribArray(0);
+    gl.glEnableVertexAttribArray(m_posAttr);
 }
 
 void SingleColorProgram::release() {
-    gl.glDisableVertexAttribArray(0);
+    gl.glDisableVertexAttribArray(m_posAttr);
     QOpenGLShaderProgram::release();
 }
 

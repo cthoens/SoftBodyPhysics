@@ -31,7 +31,8 @@ SOURCES += Main.cpp\
     Renderer.cpp \
     RenderWidget.cpp \
     Scenes/Bar.cpp \
-    Shaders/SingleColorProgram.cpp
+    Shaders/SingleColorProgram.cpp \
+    Shaders/MultiColorProgram.cpp
 
 HEADERS  += MainWindow.h \
     Scene.h \
@@ -40,6 +41,7 @@ HEADERS  += MainWindow.h \
     Renderer.h \
     RenderWidget.h \
     Scenes/Bar.h \
-    Shaders/SingleColorProgram.h
+    Shaders/SingleColorProgram.h \
+    Shaders/MultiColorProgram.h
 
 FORMS    += mainwindow.ui
