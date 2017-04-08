@@ -53,12 +53,6 @@ void Renderer::resizeGL(float w, float h) {
     m_program->setUniformValue(m_matrixUniform, projection);
 }
 
-void Renderer::Step() {
-    for (auto &body : scene->bodies) {
-        body.Step(1.0f / 120.0f);
-    }
-}
-
 void Renderer::Render() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -81,33 +75,38 @@ void Renderer::RenderBody(Body const& body) {
 
     vector<QVector2D> points;
     points.reserve(particles.size());
-    for (auto &particle : particles) {
-        points.push_back(particle.position);
-    }
 
+    int linkCount = 0;
     for (auto &particle : particles) {
-        points.push_back(particle.position);
-        points.push_back(particle.position + .5f * particle.bendForce);
-    }
-
-    for (auto &particle : particles) {
-        points.push_back(particle.position);
-        points.push_back(particle.position + .5f * particle.totalForce);
+        for (auto &link: particle.links) {
+            points.push_back(particle.position);
+            points.push_back(link.particle.position);
+            linkCount++;
+        }
     }
 
     glVertexAttribPointer(m_posAttr, 2, GL_FLOAT, GL_FALSE, 0, &points[0]);
     glEnableVertexAttribArray(0);
-
-    int particleCount = int(particles.size());
-
     SetColor(QVector3D(1.0f, 1.0f, 1.0f));
-    glDrawArrays(GL_LINE_STRIP, 0, particleCount);
+    glDrawArrays(GL_LINES, 0, 2 * linkCount);
 
+    // StretchForces
+    points.clear();
+    for (auto &particle : particles) {
+        points.push_back(particle.position);
+        points.push_back(particle.position + .5f * particle.bendForce);
+    }
     SetColor(QVector3D(1.0f, 0.0f, 0.0f));
-    glDrawArrays(GL_LINES, particleCount, 2 * particleCount);
+    glDrawArrays(GL_LINES, 0, 2 * int(particles.size()));
 
+    // BendForces
+    points.clear();
+    for (auto &particle : particles) {
+        points.push_back(particle.position);
+        points.push_back(particle.position + .5f * particle.totalForce);
+    }
     SetColor(QVector3D(0.0f, 1.0f, 0.0f));
-    glDrawArrays(GL_LINES, 3 * particleCount, 2 * particleCount);
+    glDrawArrays(GL_LINES, 0, 2 * int(particles.size()));
 
     glDisableVertexAttribArray(0);
 }

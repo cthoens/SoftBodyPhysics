@@ -15,7 +15,6 @@ public:
 
     void initialize(QObject *parent);
     void resizeGL(float w, float h);
-    void Step();
     void Render();
 
     void SetColor(QVector3D color);

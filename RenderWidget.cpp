@@ -47,7 +47,9 @@ void RenderWidget::resizeGL(int w, int h)
 void RenderWidget::paintGL()
 {
     if (play) {
-        renderer.Step();
+        scene.Step();
+    } else {
+        scene.UpdateForces();
     }
     renderer.Render();
 }

@@ -35,7 +35,7 @@ void Particle::UpdateBendForce()
         QVector2D v2 = links[1].particle.position - position;
         float angle = (float)(atan2(v2.y(), v2.x()) - atan2(v1.y(), v1.x()));
         if (angle < 0) angle += 2 * float(M_PI);
-        float elongation = angle - restingAngles[0];
+        float elongation = angle - links[0].relaxedAngle;
 
         {
             QVector2D dir = (position - links[0].particle.position).normalized();

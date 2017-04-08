@@ -6,8 +6,9 @@
 
 class Link {
 public:
-	class Particle &particle;
+    class Particle &particle;
 	float relaxedDistance;
+    float relaxedAngle;
 };
 
 class Particle
@@ -20,7 +21,6 @@ public:
     QVector2D totalForce;
     QVector2D bendForce;
     std::vector<Link> links;
-    std::vector<float> restingAngles;
     float invMass;
 
     Particle(Body& body);

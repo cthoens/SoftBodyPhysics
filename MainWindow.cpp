@@ -7,6 +7,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     Body &body = ui->renderWidget->scene.bodies[0];
+    ui->actionTogglePlay->setChecked(ui->renderWidget->play);
     ui->stretchStiffnessSlider->setValue(int(body.stiffness * 100.0f));
     ui->bendStiffnessSlider->setValue(int(body.bendStiffness * 100.0f));
 }

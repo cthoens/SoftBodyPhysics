@@ -11,7 +11,7 @@ class RenderWidget : public QGLWidget
 {
 public:
     Bar scene;
-    boolean play = true;
+    boolean play = false;
 
     RenderWidget(QWidget *parent);
 

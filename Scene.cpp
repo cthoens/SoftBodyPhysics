@@ -6,3 +6,15 @@ Body& Scene::AddBody(vector<QVector2D> const& particles, vector<std::pair<int, i
     bodies.emplace_back(particles, indices, mass);
     return bodies.back();
 }
+
+void Scene::Step() {
+    for (auto &body : bodies) {
+        body.Step(1.0f / 120.0f);
+    }
+}
+
+void Scene::UpdateForces() {
+    for (auto &body : bodies) {
+        body.UpdateForces();
+    }
+}
