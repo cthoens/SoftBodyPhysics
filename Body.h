@@ -8,8 +8,8 @@
 
 class Body {
 public:
-    float stiffness = 10.0f;
-    float bendStiffness = 10.0f;
+    float stiffness = 30.0f;
+    float bendStiffness = 9.0f;
     float friction = 0.95f;
     float bendFriction = 0.95f;
 

@@ -21,6 +21,7 @@ public slots:
     void SliderChanged(int value);
     void ShowStretchForces(bool value);
     void ShowBendForces(bool value);
+    void ToggleForces();
 
 private:
     Ui::MainWindow *ui;

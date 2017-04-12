@@ -199,6 +199,7 @@
     </property>
     <addaction name="actionStretchForces"/>
     <addaction name="actionBendForces"/>
+    <addaction name="actionToggleForces"/>
    </widget>
    <addaction name="menuSimulation"/>
    <addaction name="menuView"/>
@@ -244,6 +245,9 @@
    <property name="text">
     <string>Stretch Forces</string>
    </property>
+   <property name="toolTip">
+    <string>Stretch forces</string>
+   </property>
   </action>
   <action name="actionBendForces">
    <property name="checkable">
@@ -256,7 +260,18 @@
     <string>Bend Forces</string>
    </property>
    <property name="toolTip">
-    <string>Show Bend Forces</string>
+    <string>Show bend forces</string>
+   </property>
+  </action>
+  <action name="actionToggleForces">
+   <property name="text">
+    <string>Toggle Forces</string>
+   </property>
+   <property name="toolTip">
+    <string>Toggle all forces</string>
+   </property>
+   <property name="shortcut">
+    <string>F</string>
    </property>
   </action>
  </widget>
@@ -366,6 +381,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionToggleForces</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ToggleForces()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>523</x>
+     <y>317</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>TogglePlay(bool)</slot>
@@ -373,5 +404,6 @@
   <slot>Step()</slot>
   <slot>ShowStretchForces(bool)</slot>
   <slot>ShowBendForces(bool)</slot>
+  <slot>ToggleForces()</slot>
  </slots>
 </ui>

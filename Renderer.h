@@ -11,8 +11,8 @@
 
 class Renderer : public QOpenGLFunctions {
 public:
-    bool showStretchForces = true;
-    bool showBendForces = true;
+    bool showStretchForces = false;
+    bool showBendForces = false;
     QVector2D invStretch;
     class Scene *scene = nullptr;
 

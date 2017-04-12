@@ -39,6 +39,13 @@ void MainWindow::ShowBendForces(bool value)
     ui->renderWidget->renderer.showBendForces = value;
 }
 
+void MainWindow::ToggleForces()
+{
+    bool show = !ui->actionBendForces->isChecked() && !ui->actionStretchForces->isChecked();
+    ui->actionBendForces->setChecked(show);
+    ui->actionStretchForces->setChecked(show);
+}
+
 void MainWindow::SliderChanged(int value)
 {
     Body &body = ui->renderWidget->scene.bodies[0];
