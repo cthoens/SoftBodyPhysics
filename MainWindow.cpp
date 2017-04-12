@@ -10,6 +10,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->actionTogglePlay->setChecked(ui->renderWidget->play);
     ui->stretchStiffnessSlider->setValue(int(body.stiffness * 100.0f));
     ui->bendStiffnessSlider->setValue(int(body.bendStiffness * 100.0f));
+    ui->actionStretchForces->setChecked(ui->renderWidget->renderer.showStretchForces);
+    ui->actionBendForces->setChecked(ui->renderWidget->renderer.showBendForces);
 }
 
 MainWindow::~MainWindow()
@@ -17,12 +19,27 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::togglePlay(bool play)
+void MainWindow::TogglePlay(bool play)
 {
     ui->renderWidget->play = play;
 }
 
-void MainWindow::sliderChanged(int value)
+void MainWindow::Step()
+{
+    ui->renderWidget->step = true;
+}
+
+void MainWindow::ShowStretchForces(bool value)
+{
+    ui->renderWidget->renderer.showStretchForces = value;
+}
+
+void MainWindow::ShowBendForces(bool value)
+{
+    ui->renderWidget->renderer.showBendForces = value;
+}
+
+void MainWindow::SliderChanged(int value)
 {
     Body &body = ui->renderWidget->scene.bodies[0];
     if (sender() == ui->stretchStiffnessSlider)

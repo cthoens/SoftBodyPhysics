@@ -191,8 +191,17 @@
      <string>Simulation</string>
     </property>
     <addaction name="actionTogglePlay"/>
+    <addaction name="actionStep"/>
+   </widget>
+   <widget class="QMenu" name="menuView">
+    <property name="title">
+     <string>View</string>
+    </property>
+    <addaction name="actionStretchForces"/>
+    <addaction name="actionBendForces"/>
    </widget>
    <addaction name="menuSimulation"/>
+   <addaction name="menuView"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -217,6 +226,39 @@
     <string>Space</string>
    </property>
   </action>
+  <action name="actionStep">
+   <property name="text">
+    <string>Step</string>
+   </property>
+   <property name="shortcut">
+    <string>S</string>
+   </property>
+  </action>
+  <action name="actionStretchForces">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Stretch Forces</string>
+   </property>
+  </action>
+  <action name="actionBendForces">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Bend Forces</string>
+   </property>
+   <property name="toolTip">
+    <string>Show Bend Forces</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
@@ -232,7 +274,7 @@
    <sender>actionTogglePlay</sender>
    <signal>toggled(bool)</signal>
    <receiver>MainWindow</receiver>
-   <slot>togglePlay(bool)</slot>
+   <slot>TogglePlay(bool)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
@@ -248,7 +290,7 @@
    <sender>stretchStiffnessSlider</sender>
    <signal>valueChanged(int)</signal>
    <receiver>MainWindow</receiver>
-   <slot>sliderChanged(int)</slot>
+   <slot>SliderChanged(int)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>813</x>
@@ -264,7 +306,7 @@
    <sender>bendStiffnessSlider</sender>
    <signal>valueChanged(int)</signal>
    <receiver>MainWindow</receiver>
-   <slot>sliderChanged(int)</slot>
+   <slot>SliderChanged(int)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>813</x>
@@ -276,9 +318,60 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionStep</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>Step()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>523</x>
+     <y>317</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionStretchForces</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ShowStretchForces(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>523</x>
+     <y>317</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionBendForces</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ShowBendForces(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>523</x>
+     <y>317</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
-  <slot>togglePlay(bool)</slot>
-  <slot>sliderChanged(int)</slot>
+  <slot>TogglePlay(bool)</slot>
+  <slot>SliderChanged(int)</slot>
+  <slot>Step()</slot>
+  <slot>ShowStretchForces(bool)</slot>
+  <slot>ShowBendForces(bool)</slot>
  </slots>
 </ui>

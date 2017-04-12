@@ -46,7 +46,7 @@ void Renderer::RenderBody(Body const& body) {
     std::vector<Particle> const& particles = body.particles;
 
     vector<QVector2D> points;
-    points.reserve(particles.size());
+    points.reserve(2 * particles.size());
 
     int linkCount = 0;
     for (auto &particle : particles) {
@@ -91,26 +91,46 @@ void Renderer::RenderBody(Body const& body) {
         multiColorProgram.release();
     }
 
+    RenderForces(body);
+}
+
+void Renderer::RenderForces(Body const& body) {
+    std::vector<Particle> const& particles = body.particles;
+
+    if (!showStretchForces && !showBendForces) {
+        return;
+    }
+
+    vector<QVector2D> points;
+    points.reserve(2 * particles.size());
+
     // StretchForces
     singleColorProgram.bind();
     singleColorProgram.SetProjection(projection);
+    singleColorProgram.SetVertices(points);
 
-    points.clear();
-    for (auto &particle : particles) {
-        points.push_back(particle.position);
-        points.push_back(particle.position + .5f * particle.bendForce);
+    if (showStretchForces)
+    {
+        points.clear();
+        for (auto &particle : particles) {
+            points.push_back(particle.position);
+            points.push_back(particle.position + .5f * particle.bendForce);
+        }
+        singleColorProgram.SetColor(QVector3D(1.0f, 0.0f, 0.0f));
+        glDrawArrays(GL_LINES, 0, 2 * int(particles.size()));
     }
-    singleColorProgram.SetColor(QVector3D(1.0f, 0.0f, 0.0f));
-    glDrawArrays(GL_LINES, 0, 2 * int(particles.size()));
 
-    // BendForces
-    points.clear();
-    for (auto &particle : particles) {
-        points.push_back(particle.position);
-        points.push_back(particle.position + .5f * particle.totalForce);
+    if (showBendForces)
+    {
+        // BendForces
+        points.clear();
+        for (auto &particle : particles) {
+            points.push_back(particle.position);
+            points.push_back(particle.position + .5f * particle.totalForce);
+        }
+        singleColorProgram.SetColor(QVector3D(0.0f, 1.0f, 0.0f));
+        glDrawArrays(GL_LINES, 0, 2 * int(particles.size()));
     }
-    singleColorProgram.SetColor(QVector3D(0.0f, 1.0f, 0.0f));
-    glDrawArrays(GL_LINES, 0, 2 * int(particles.size()));
 
     singleColorProgram.release();
 }

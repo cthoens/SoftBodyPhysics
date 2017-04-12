@@ -10,7 +10,9 @@
 #include <vector>
 
 class Renderer : public QOpenGLFunctions {
-public:    
+public:
+    bool showStretchForces = true;
+    bool showBendForces = true;
     QVector2D invStretch;
     class Scene *scene = nullptr;
 
@@ -28,6 +30,7 @@ private:
     MultiColorProgram multiColorProgram;
 
     void RenderBody(Body const& body);
+    void RenderForces(Body const& body);
 };
 
 extern Renderer gl;

@@ -37,5 +37,5 @@ void SingleColorProgram::SetProjection(QMatrix4x4 &projection) {
 }
 
 void SingleColorProgram::SetVertices(std::vector<QVector2D> &vertices) {
-    gl.glVertexAttribPointer(m_posAttr, 2, GL_FLOAT, GL_FALSE, 0, &vertices[0]);
+    gl.glVertexAttribPointer(m_posAttr, 2, GL_FLOAT, GL_FALSE, 0, vertices.data());
 }

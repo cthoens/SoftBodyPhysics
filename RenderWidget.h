@@ -11,7 +11,10 @@ class RenderWidget : public QGLWidget
 {
 public:
     Bar scene;
+    Renderer &renderer;
+
     boolean play = true;
+    boolean step = false;
 
     RenderWidget(QWidget *parent);
 
@@ -23,6 +26,4 @@ protected:
     void mouseMoveEvent(QMouseEvent *event) override;
     void mousePressEvent(QMouseEvent *event) override;
     void mouseReleaseEvent(QMouseEvent *event) override;
-private:
-    Renderer &renderer;
 };

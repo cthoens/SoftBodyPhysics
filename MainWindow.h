@@ -16,8 +16,11 @@ public:
     ~MainWindow();
 
 public slots:
-    void togglePlay(bool play);
-    void sliderChanged(int value);
+    void TogglePlay(bool play);
+    void Step();
+    void SliderChanged(int value);
+    void ShowStretchForces(bool value);
+    void ShowBendForces(bool value);
 
 private:
     Ui::MainWindow *ui;
