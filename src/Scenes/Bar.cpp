@@ -1,10 +1,13 @@
 
 #include "Bar.h"
 
+#include "../linalg.h"
+
+using namespace linalg::aliases;
 using namespace std;
 
 Bar::Bar() {
-    vector<QVector2D> points;
+    vector<float2> points;
     vector<std::pair<int, int>> indices;
 
     for (float i = 0; i < 10; i++) {

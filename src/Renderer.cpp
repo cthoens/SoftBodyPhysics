@@ -18,13 +18,13 @@ void Renderer::initialize() {
 
 void Renderer::resizeGL(float w, float h) {
     glViewport(0, 0, w, h);
-    projection.setToIdentity();
+    projection = linalg::identity;
     if (w>h) {
-        invStretch = QVector2D(w/h, 1.0f);
-        projection.scale(h/w, 1.0f);
+        invStretch = float2(w/h, 1.0f);
+        //projection.scale(h/w, 1.0f);
     } else {
-        invStretch = QVector2D(1.0f, h/w);
-        projection.scale(1.0f, w/h);
+        invStretch = float2(1.0f, h/w);
+        //projection.scale(1.0f, w/h);
     }
     singleColorProgram.SetProjection(projection);
 }
@@ -37,15 +37,14 @@ void Renderer::Render() {
     }
 }
 
-bool showStretch = true;
-QVector3D relaxedColor(1.0f, 1.0f, 1.0f);
-QVector3D stretchedColor(1.0f, 0.0f, 0.0f);
-QVector3D compressedColor(0.0f, 0.0f, 1.0f);
+float3 relaxedColor(1.0f, 1.0f, 1.0f);
+float3 stretchedColor(1.0f, 0.0f, 0.0f);
+float3 compressedColor(0.0f, 0.0f, 1.0f);
 
 void Renderer::RenderBody(Body const& body) {
     std::vector<Particle> const& particles = body.particles;
 
-    vector<QVector2D> points;
+    vector<float2> points;
     points.reserve(2 * particles.size());
 
     int linkCount = 0;
@@ -60,21 +59,21 @@ void Renderer::RenderBody(Body const& body) {
     if (!showStretch) {
         singleColorProgram.bind();
         singleColorProgram.SetProjection(projection);
-        singleColorProgram.SetVertices(points);
-        singleColorProgram.SetColor(QVector3D(1.0f, 1.0f, 1.0f));
+	singleColorProgram.SetVertices(points);
+        singleColorProgram.SetColor(float3(1.0f, 1.0f, 1.0f));
         glDrawArrays(GL_LINES, 0, 2 * linkCount);
         singleColorProgram.release();
     } else {
         multiColorProgram.bind();
         multiColorProgram.SetProjection(projection);
 
-        vector<QVector3D> colors;
+        vector<float3> colors;
         for (auto &particle : particles) {
             for (auto &link: particle.links) {
-                float length = (link.particle.position - particle.position).length();
+                float length = linalg::length(link.particle.position - particle.position);
                 float stretch = (max(min(length / link.relaxedDistance, 1.2f), 0.8f) -1.0f) * 5.0f;
 
-                QVector3D linkColor;
+                float3 linkColor;
                 if (stretch < 0.0f) {
                     stretch *= -1.0f;
                     linkColor = compressedColor * stretch + relaxedColor * (1.0f - stretch);
@@ -101,13 +100,12 @@ void Renderer::RenderForces(Body const& body) {
         return;
     }
 
-    vector<QVector2D> points;
+    vector<float2> points;
     points.reserve(2 * particles.size());
 
     // StretchForces
     singleColorProgram.bind();
     singleColorProgram.SetProjection(projection);
-    singleColorProgram.SetVertices(points);
 
     if (showStretchForces)
     {
@@ -116,7 +114,8 @@ void Renderer::RenderForces(Body const& body) {
             points.push_back(particle.position);
             points.push_back(particle.position + .5f * particle.bendForce);
         }
-        singleColorProgram.SetColor(QVector3D(1.0f, 0.0f, 0.0f));
+        singleColorProgram.SetVertices(points);
+        singleColorProgram.SetColor(float3(1.0f, 0.0f, 0.0f));
         glDrawArrays(GL_LINES, 0, 2 * int(particles.size()));
     }
 
@@ -128,7 +127,8 @@ void Renderer::RenderForces(Body const& body) {
             points.push_back(particle.position);
             points.push_back(particle.position + .5f * particle.totalForce);
         }
-        singleColorProgram.SetColor(QVector3D(0.0f, 1.0f, 0.0f));
+        singleColorProgram.SetVertices(points);
+        singleColorProgram.SetColor(float3(0.0f, 1.0f, 0.0f));
         glDrawArrays(GL_LINES, 0, 2 * int(particles.size()));
     }
 

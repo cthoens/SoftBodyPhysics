@@ -2,9 +2,10 @@
 
 #include "Particle.h"
 
-#include <QVector2D>
-
 #include <vector>
+
+#include "linalg.h"
+using namespace linalg::aliases;
 
 class Body {
 public:
@@ -15,11 +16,11 @@ public:
 
     std::vector<Particle> particles;
 
-    Body(std::vector<QVector2D> const& points, std::vector<std::pair<int, int>> const& indices, float mass);
+    Body(std::vector<float2> const& points, std::vector<std::pair<int, int>> const& indices, float mass);
 
     void Step(float elapsed);
     void UpdateForces();
 
 private:
-    void Bake(std::vector<QVector2D> const& points, std::vector<std::pair<int, int>> const& indices, float mass);
+    void Bake(std::vector<float2> const& points, std::vector<std::pair<int, int>> const& indices, float mass);
 };

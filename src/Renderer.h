@@ -3,17 +3,16 @@
 #include "Shaders/SingleColorProgram.h"
 #include "Shaders/MultiColorProgram.h"
 
-#include <QVector2D>
-#include <QMatrix4x4>
-#include <QtGui/QOpenGLFunctions>
-
 #include <vector>
 
-class Renderer : public QOpenGLFunctions {
+#include <SDL_opengles2.h>
+
+class Renderer {
 public:
+    bool showStretch = false;
     bool showStretchForces = false;
     bool showBendForces = false;
-    QVector2D invStretch;
+    float2 invStretch;
     class Scene *scene = nullptr;
 
     Renderer();
@@ -25,7 +24,7 @@ public:
     class Body& AddBody(std::vector<class Particle> &particles);
 
 private:
-    QMatrix4x4 projection;
+    float4x4 projection;
     SingleColorProgram singleColorProgram;
     MultiColorProgram multiColorProgram;
 

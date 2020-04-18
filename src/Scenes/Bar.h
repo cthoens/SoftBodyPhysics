@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Scene.h"
+#include "../Scene.h"
 
 enum InnerSupport {
     NONE, REGULAR, CROSS

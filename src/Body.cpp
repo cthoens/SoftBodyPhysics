@@ -7,15 +7,15 @@
 
 using namespace std;
 
-Body::Body(vector<QVector2D> const& points, std::vector<std::pair<int, int>> const& indices, float mass)
+Body::Body(vector<float2> const& points, std::vector<std::pair<int, int>> const& indices, float mass)
 {
     Bake(points, indices, mass);
 }
 
 void Body::Step(float elapsed) {
     for (auto &particle : particles) {
-        particle.totalForce = QVector2D();
-        particle.bendForce = QVector2D();
+        particle.totalForce = float2();
+        particle.bendForce = float2();
     }
 
     for (auto &particle : particles) {
@@ -38,8 +38,8 @@ void Body::Step(float elapsed) {
 void Body::UpdateForces()
 {
     for (auto &particle : particles) {
-        particle.totalForce = QVector2D();
-        particle.bendForce = QVector2D();
+        particle.totalForce = float2();
+        particle.bendForce = float2();
     }
 
     for (auto &particle : particles) {
@@ -65,13 +65,13 @@ public:
 
 class TempParticle {
 public:
-    QVector2D position;
+    float2 position;
     vector<TempLink> links;
 
     void AddLink(Particle &particle, float relaxedDistance)
     {
-        QVector2D v1 = particle.position - position;
-        float angleToX = atan2(v1.y(), v1.x());
+        float2 v1 = particle.position - position;
+        float angleToX = atan2(v1.y, v1.x);
         TempLink link = {&particle, relaxedDistance, angleToX};
         links.push_back(link);
     }
@@ -94,7 +94,7 @@ public:
 };
 
 
-void Body::Bake(vector<QVector2D> const& points, std::vector<std::pair<int, int>> const& indices, float mass) {
+void Body::Bake(vector<float2> const& points, std::vector<std::pair<int, int>> const& indices, float mass) {
     assert(points.size() >= 2);
 
     float invMass = 1.0f / mass;
@@ -106,8 +106,8 @@ void Body::Bake(vector<QVector2D> const& points, std::vector<std::pair<int, int>
     for (auto &point : points) {
         Particle particle(*this);
         particle.position = point;
-        particle.velocity = QVector2D(0.0f, 0.0f);
-        particle.bendVelocity = QVector2D(0.0f, 0.0f);
+        particle.velocity = float2(0.0f, 0.0f);
+        particle.bendVelocity = float2(0.0f, 0.0f);
         particle.invMass = invMass;
         particles.push_back(particle);
         tempParticles.push_back({particle.position});
@@ -119,7 +119,7 @@ void Body::Bake(vector<QVector2D> const& points, std::vector<std::pair<int, int>
         TempParticle &firstTempParticle = tempParticles[index.first];
         TempParticle &secondTempParticle = tempParticles[index.second];
 
-        float relaxedDistance = (firstParticle.position - secondParticle.position).length();
+        float relaxedDistance = length(firstParticle.position - secondParticle.position);
 
         firstTempParticle.AddLink(secondParticle, relaxedDistance);
         secondTempParticle.AddLink(firstParticle, relaxedDistance);
@@ -141,7 +141,7 @@ void Body::Bake(vector<QVector2D> const& points, std::vector<std::pair<int, int>
         Particle &previous = *previousIt;
         Particle &current = *currentIt;
 
-        float restingDistance = (current.position - previous.position).length();
+        float restingDistance = length(current.position - previous.position);
 
         Link previousLink = {current, restingDistance};
         previousIt->links.push_back(previousLink);
@@ -152,8 +152,8 @@ void Body::Bake(vector<QVector2D> const& points, std::vector<std::pair<int, int>
         if (nextIt != particles.end())
         {
             Particle &next = *nextIt;
-            QVector2D v1 = previous.position - current.position;
-            QVector2D v2 = next.position - current.position;
+            float2 v1 = previous.position - current.position;
+            float2 v2 = next.position - current.position;
             float restingAngle = (float)(atan2(v2.y(), v2.x()) - atan2(v1.y(), v1.x()));
             if (restingAngle < 0) restingAngle += 2 * float(M_PI);
             current.restingAngles.push_back(restingAngle);

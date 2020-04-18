@@ -1,8 +1,9 @@
 #pragma once
 
-#include <QtGui/QVector2D>
-
 #include <vector>
+
+#include "linalg.h"
+using namespace linalg::aliases;
 
 class Link {
 public:
@@ -15,11 +16,11 @@ class Particle
 {
 public:
     class Body& body;
-    QVector2D position;
-    QVector2D velocity;
-    QVector2D bendVelocity;
-    QVector2D totalForce;
-    QVector2D bendForce;
+    float2 position;
+    float2 velocity;
+    float2 bendVelocity;
+    float2 totalForce;
+    float2 bendForce;
     std::vector<Link> links;
     float invMass;
 
@@ -30,6 +31,6 @@ public:
     void UpdateBendForce();
     void StepStretch(float timestep);
     void StepBend(float timestep);
-    static std::vector<Particle> Bake(std::vector<QVector2D> points, float mass);
+    static std::vector<Particle> Bake(std::vector<float2> points, float mass);
 };
 
