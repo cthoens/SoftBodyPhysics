@@ -7,19 +7,21 @@
 </head>
 
 <body>
+    <h1>Soft Body Physics Simulation Demo</h1>
+    <div>Drag any of the nodes below slowly so make the simulation move.</div>
 
-    <div>
+    <div>        
         <!-- Create the canvas that the C++ code will draw into -->
         <canvas id="canvas" oncontextmenu="event.preventDefault()"></canvas>
     </div>
 
     <div>
         <input type="checkbox" id="showStretch">
-        <label for="showStretch">Show Edge Stretch</label><br>
+        <label for="showStretch">Show Edge Stretch.</label> Visualize stretched and compressed edges by coloring them red and blue.<br>
         <input type="checkbox" id="showStretchForces">
-        <label for="showStretchForces">Show Stretch Forces</label><br>
+        <label for="showStretchForces">Show Stretch Forces.</label> Draw the vector of the total forces acting on each node resulting from compression/stretching.<br>
         <input type="checkbox" id="showBendForces">
-        <label for="showBendForces">Show Bend Forces</label><br>
+        <label for="showBendForces">Show Bend Forces.</label> Draw the vector of the total bending forces acting on each node. Bending forces result from the angle between two edges differing from the resting angle (the angle the simulation was started in)<br>
     </div>
 
     <!-- Allow the C++ to access the canvas element --> 
