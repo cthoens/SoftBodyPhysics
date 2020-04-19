@@ -1,5 +1,7 @@
 # Soft Body Physics Demo
 
+ [Try out the demo in your Browser.](https://cthoens.github.io/SoftBodyPhysics/)
+
 ## Description
 The system is based on a very basic spring-mass model using the Euler method to solve the ODE. It calcuates forces resulting 
 from both stretching and bending. The latter results from the angle between two edges differing from the resting angle (the 
